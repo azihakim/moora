@@ -12,64 +12,65 @@ use Illuminate\Http\Request;
 
 class PerhitunganController extends Controller
 {
-    // public function index()
-    // {
-    //     $alternatif = User::where(['role' => 'Pegawai'])->get();
-    //     $kriteria = Kriteria::orderBy('id')->get();
-    //     $matriks_keputusan = $alternatif->map(function ($a) use ($kriteria) {
-    //         return [
-    //             "kode_alternatif" => $a->kode_alternatif,
-    //             "nama_alternatif" => $a->name,
-    //             "nilai" => $kriteria->map(function ($k) use ($a) {
-    //                 $penilaian = Penilaian::where([
-    //                     'id_user' => $a->id,
-    //                     'id_kriteria' => $k->id,
-    //                 ])->first();
-    //                 return [$penilaian->sub_kriteria->nilai, $penilaian->kriteria->jenis];
-    //             })
-    //         ];
-    //     });
-
-    //     $matriks_ternormalisasi = $matriks_keputusan->map(function ($mk) use ($matriks_keputusan) {
-    //         $mk['nilai'] = $mk['nilai']->map(function ($n, $i) use ($matriks_keputusan) {
-    //             $akar_nilai_per_kriteria = sqrt($matriks_keputusan->reduce(function ($carry, $mk) use ($i) {
-    //                 return $carry + pow($mk['nilai'][$i][0], 2);
-    //             }, 0));
-    //             $n[0] = $n[0] / $akar_nilai_per_kriteria;
-    //             return $n;
-    //         });
-    //         return $mk;
-    //     });
-
-    //     $matriks_normalisasi_terbobot = $matriks_ternormalisasi->map(function ($mk) use ($kriteria) {
-    //         $mk['nilai'] = $mk['nilai']->map(function ($n, $i) use ($kriteria) {
-    //             $n[0] *= $kriteria[$i]->bobot;
-    //             return $n;
-    //         });
-    //         return $mk;
-    //     });
-
-    //     $nilai_yi = $matriks_normalisasi_terbobot->map(function ($mnt) {
-    //         $fn = function ($collection, $jenis) {
-    //             return $collection->reduce(function ($carry, $n) use ($jenis) {
-    //                 if ($n[1] == $jenis) {
-    //                     return $carry + $n[0];
-    //                 }
-    //                 return $carry;
-    //             });
-    //         };
-    //         $mnt['max'] = $fn($mnt['nilai'], 'Benefit');
-    //         $mnt['min'] = $fn($mnt['nilai'], 'Cost');
-    //         $mnt['yi'] = $mnt['max'] - $mnt['min'];
-    //         return $mnt;
-    //     });
-
-    //     return view("perhitungan.index", compact('matriks_keputusan', 'matriks_ternormalisasi', 'matriks_normalisasi_terbobot', 'nilai_yi', 'kriteria'));
-    // }
-
     public function index()
     {
-        return view('perhitungan.index');
+        $data = Penilaian::all();
+        return view('perhitungan.index', compact('data'));
+    }
+
+    public function perhitunganMoora()
+    {
+        $alternatif = User::where(['role' => 'Pegawai'])->get();
+        $kriteria = Kriteria::orderBy('id')->get();
+        $matriks_keputusan = $alternatif->map(function ($a) use ($kriteria) {
+            return [
+                "kode_alternatif" => $a->kode_alternatif,
+                "nama_alternatif" => $a->name,
+                "nilai" => $kriteria->map(function ($k) use ($a) {
+                    $penilaian = Penilaian::where([
+                        'id_user' => $a->id,
+                        'id_kriteria' => $k->id,
+                    ])->first();
+                    return [$penilaian->sub_kriteria->nilai, $penilaian->kriteria->jenis];
+                })
+            ];
+        });
+
+        $matriks_ternormalisasi = $matriks_keputusan->map(function ($mk) use ($matriks_keputusan) {
+            $mk['nilai'] = $mk['nilai']->map(function ($n, $i) use ($matriks_keputusan) {
+                $akar_nilai_per_kriteria = sqrt($matriks_keputusan->reduce(function ($carry, $mk) use ($i) {
+                    return $carry + pow($mk['nilai'][$i][0], 2);
+                }, 0));
+                $n[0] = $n[0] / $akar_nilai_per_kriteria;
+                return $n;
+            });
+            return $mk;
+        });
+
+        $matriks_normalisasi_terbobot = $matriks_ternormalisasi->map(function ($mk) use ($kriteria) {
+            $mk['nilai'] = $mk['nilai']->map(function ($n, $i) use ($kriteria) {
+                $n[0] *= $kriteria[$i]->bobot;
+                return $n;
+            });
+            return $mk;
+        });
+
+        $nilai_yi = $matriks_normalisasi_terbobot->map(function ($mnt) {
+            $fn = function ($collection, $jenis) {
+                return $collection->reduce(function ($carry, $n) use ($jenis) {
+                    if ($n[1] == $jenis) {
+                        return $carry + $n[0];
+                    }
+                    return $carry;
+                });
+            };
+            $mnt['max'] = $fn($mnt['nilai'], 'Benefit');
+            $mnt['min'] = $fn($mnt['nilai'], 'Cost');
+            $mnt['yi'] = $mnt['max'] - $mnt['min'];
+            return $mnt;
+        });
+
+        return view("perhitungan.index", compact('matriks_keputusan', 'matriks_ternormalisasi', 'matriks_normalisasi_terbobot', 'nilai_yi', 'kriteria'));
     }
 
     public function countPenilaianPerbulan($tglDari, $tglSampai)
@@ -88,17 +89,20 @@ class PerhitunganController extends Controller
         foreach ($nilaiPerbulan as $userId => $kriterias) {
             foreach ($kriterias as $kriteriaId => $items) {
                 // Hitung total nilai untuk kriteria tertentu dari periode yang ditentukan
-                $totalNilai = $items->sum('nilai'); // Menjumlahkan nilai per kriteria
+                $totalNilai = $items->sum('nilai');
+                if ($kriteriaId != 4) {
+                    $totalNilai /= 2;
+                }
 
                 // Tentukan sub-kriteria berdasarkan total nilai
-                // $subKriteria = $this->getSubKriteria($kriteriaId, $totalNilai);
+                $subKriteria = $this->getSubKriteria($kriteriaId, $totalNilai, $userId);
 
                 // Simpan data penilaian yang telah diproses (hanya satu data untuk setiap kombinasi user dan kriteria)
                 $penilaianData[] = [
                     'id_user' => $userId,
                     'id_kriteria' => $kriteriaId,
-                    // 'id_sub_kriteria' => $subKriteria ? $subKriteria->id : null,
-                    'id_sub_kriteria' => $totalNilai,
+                    'id_sub_kriteria' => $subKriteria ? $subKriteria->id : null,
+                    // 'id_sub_kriteria' => $totalNilai,
                 ];
             }
         }
@@ -108,7 +112,7 @@ class PerhitunganController extends Controller
         //     return $item['id_user'] . '-' . $item['id_kriteria']; // Menghindari duplikasi berdasarkan kombinasi user dan kriteria
         // })->values()->all();
 
-        dd($penilaianData);
+        // dd($penilaianData);
 
         // Simpan semua penilaian untuk user pada periode tertentu
         foreach ($penilaianData as $data) {
@@ -123,7 +127,7 @@ class PerhitunganController extends Controller
 
 
 
-    private function getSubKriteria($kriteriaId, $totalNilai)
+    private function getSubKriteria($kriteriaId, $totalNilai, $userId)
     {
         // kehadiran: absensi dalam persen
         if ($kriteriaId == 4) {
@@ -149,26 +153,26 @@ class PerhitunganController extends Controller
 
         // masa kerja: tahun kerja
         if ($kriteriaId == 6) {
-            if ($totalNilai > 5) {
+            $tglMasuk = User::find($userId)->tgl_masuk;
+            $tglSekarang = now()->toDateString();
+            $masaKerja = date_diff(date_create($tglMasuk), date_create($tglSekarang))->y;
+
+            if ($masaKerja > 5) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '≥ 5 tahun')
-                    ->first();
-            } elseif ($totalNilai >= 3) {
+                    ->where('nama_sub_kriteria', '> 5 tahun')
+                    ->first();  // Sangat Baik
+            } elseif ($masaKerja > 3) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '≥ 3 tahun')
-                    ->first();
-            } elseif ($totalNilai >= 2) {
+                    ->where('nama_sub_kriteria', '3 < Masa Kerja ≤ 5')
+                    ->first();  // Baik
+            } elseif ($masaKerja > 1) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '≥ 2 tahun')
-                    ->first();
-            } elseif ($totalNilai >= 1) {
-                return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '≥ 1 tahun')
-                    ->first();
+                    ->where('nama_sub_kriteria', '1 < Masa Kerja ≤ 3')
+                    ->first();  // Cukup
             } else {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '<1 tahun')
-                    ->first();
+                    ->where('nama_sub_kriteria', '≤ 1 tahun')
+                    ->first();  // Kurang
             }
         }
 

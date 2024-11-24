@@ -15,27 +15,50 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>Tanggal Dari</label>
-									<input type="date" name="tgl_dari" class="form-control" required>
+						<form id="countMoora">
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>Tanggal Dari</label>
+										<input type="date" name="tgl_dari" class="form-control" required>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>Tanggal Sampai</label>
+										<input type="date" name="tgl_sampai" class="form-control" required>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<button class="btn btn-primary" style="margin-top: 30px">Hitung</button>
 								</div>
 							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label>Tanggal Sampai</label>
-									<input type="date" name="tgl_sampai" class="form-control" required>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<button class="btn btn-primary" style="margin-top: 30px">Hitung</button>
-							</div>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		{{-- <div class="row">
+			<table class="table">
+				<thead>
+					<tr>
+						<td>nama</td>
+						<td>kriteria</td>
+						<td>hasil</td>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($data as $item)
+						<tr>
+							<td>{{ $item->user->name }}</td>
+							<td>{{ $item->kriteria->nama_kriteria }}</td>
+							<td>{{ $item->sub_kriteria ? $item->sub_kriteria->nama_sub_kriteria : 'Tidak Ada' }}</td>
+						</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div> --}}
 	</div>
 @endsection
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('kode_alternatif')->nullable();
             $table->string('username')->unique();
             $table->string('password');
+            $table->date('tgl_masuk')->nullable();
             $table->enum('role', ['HRD', 'Pegawai', 'Direktur']);
             $table->timestamps();
         });

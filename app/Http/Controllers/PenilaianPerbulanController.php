@@ -162,6 +162,7 @@ class PenilaianPerbulanController extends Controller
         // Update the PenilaianPerbulan based on periode
         foreach ($validated['penilaian'] as $kriteria_id => $nilai) {
             PenilaianPerbulan::where('periode', $periode)
+                ->where('id_user', $validated['karyawan'])
                 ->where('id_kriteria', $kriteria_id)
                 ->update([
                     'nilai' => $nilai,
