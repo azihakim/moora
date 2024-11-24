@@ -74,73 +74,121 @@ class PerhitunganController extends Controller
 
     public function countPenilaianPerbulan($tglDari, $tglSampai)
     {
-        // Ambil data penilaian berdasarkan periode
-        $nilaiPerbulan = PenilaianPerbulan::whereBetween('periode', [$tglDari, $tglSampai])->get();
+        // Ambil data penilaian dalam periode yang ditentukan
+        $nilaiPerbulan = PenilaianPerbulan::whereBetween('periode', [$tglDari, $tglSampai])
+            ->get();
 
-        // Loop untuk menghitung nilai dan menyimpan ke tabel penilaian
-        $nilaiPerbulan
-            ->groupBy('id_kriteria') // Kelompokkan berdasarkan kriteria
-            ->each(function ($items, $kriteriaId) use ($tglDari) {
+        // Kelompokkan data berdasarkan user_id dan kriteria_id
+        $nilaiPerbulan = $nilaiPerbulan->groupBy(['id_user', 'id_kriteria']); // Group by user_id dan id_kriteria
 
-                $totalNilai = $items->sum('nilai'); // Hitung total nilai
+        // Tempat untuk menyimpan hasil penilaian
+        $penilaianData = [];
 
-                // Tentukan sub-kriteria berdasarkan nilai total
-                $subKriteria = null;
+        // Iterasi melalui setiap user dan kriteria
+        foreach ($nilaiPerbulan as $userId => $kriterias) {
+            foreach ($kriterias as $kriteriaId => $items) {
+                // Hitung total nilai untuk kriteria tertentu dari periode yang ditentukan
+                $totalNilai = $items->sum('nilai'); // Menjumlahkan nilai per kriteria
 
-                // Cek setiap kriteria dan tentukan sub-kriteria berdasarkan nilai
-                if ($kriteriaId == 4) { // Kriteria Kehadiran
-                    if ($totalNilai >= 95) {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', '>95%')
-                            ->first();
-                    } elseif ($totalNilai >= 80) {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', '<95%')
-                            ->first();
-                    } elseif ($totalNilai >= 60) {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', '≥80%')
-                            ->first();
-                    } else {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', '<80%')
-                            ->first();
-                    }
-                }
+                // Tentukan sub-kriteria berdasarkan total nilai
+                // $subKriteria = $this->getSubKriteria($kriteriaId, $totalNilai);
 
-                // Tentukan sub-kriteria untuk kriteria lainnya seperti "Kualitas Kerja", "Kerjasama", dll
-                if ($kriteriaId == 1) { // Kriteria Kualitas Kerja
-                    if ($totalNilai >= 80) {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', 'Sangat Baik')
-                            ->first();
-                    } elseif ($totalNilai >= 60) {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', 'Baik')
-                            ->first();
-                    } elseif ($totalNilai >= 40) {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', 'Cukup')
-                            ->first();
-                    } else {
-                        $subKriteria = SubKriteria::where('id_kriteria', $kriteriaId)
-                            ->where('nama_sub_kriteria', 'Kurang')
-                            ->first();
-                    }
-                }
+                // Simpan data penilaian yang telah diproses (hanya satu data untuk setiap kombinasi user dan kriteria)
+                $penilaianData[] = [
+                    'id_user' => $userId,
+                    'id_kriteria' => $kriteriaId,
+                    // 'id_sub_kriteria' => $subKriteria ? $subKriteria->id : null,
+                    'id_sub_kriteria' => $totalNilai,
+                ];
+            }
+        }
 
-                // Proses penyimpanan data ke tabel penilaian
-                if ($subKriteria) {
-                    Penilaian::create([
-                        'id_user' => $items->first()->id_user, // ID pengguna yang dinilai
-                        'id_kriteria' => $kriteriaId,
-                        'id_sub_kriteria' => $subKriteria->id, // ID sub-kriteria yang dipilih
-                    ]);
-                }
-            });
+        // Pastikan tidak ada duplikasi data (jika ada user yang sama dan kriteria yang sama)
+        // $penilaianData = collect($penilaianData)->unique(function ($item) {
+        //     return $item['id_user'] . '-' . $item['id_kriteria']; // Menghindari duplikasi berdasarkan kombinasi user dan kriteria
+        // })->values()->all();
+
+        dd($penilaianData);
+
+        // Simpan semua penilaian untuk user pada periode tertentu
+        foreach ($penilaianData as $data) {
+            Penilaian::create($data);
+        }
 
         return response()->json([
             'message' => 'Penilaian berhasil disimpan',
         ]);
+    }
+
+
+
+
+    private function getSubKriteria($kriteriaId, $totalNilai)
+    {
+        // kehadiran: absensi dalam persen
+        if ($kriteriaId == 4) {
+            $absenPercentage = ($totalNilai / 312) * 100; // hitung persentase absensi berdasarkan 312 hari kerja
+            if ($absenPercentage > 95) {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '>95%')
+                    ->first();
+            } elseif ($absenPercentage >= 90) {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '<95%')
+                    ->first();
+            } elseif ($absenPercentage >= 80) {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '≥80%')
+                    ->first();
+            } else {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '<80%')
+                    ->first();
+            }
+        }
+
+        // masa kerja: tahun kerja
+        if ($kriteriaId == 6) {
+            if ($totalNilai > 5) {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '≥ 5 tahun')
+                    ->first();
+            } elseif ($totalNilai >= 3) {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '≥ 3 tahun')
+                    ->first();
+            } elseif ($totalNilai >= 2) {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '≥ 2 tahun')
+                    ->first();
+            } elseif ($totalNilai >= 1) {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '≥ 1 tahun')
+                    ->first();
+            } else {
+                return SubKriteria::where('id_kriteria', $kriteriaId)
+                    ->where('nama_sub_kriteria', '<1 tahun')
+                    ->first();
+            }
+        }
+
+        // Skala nilai untuk kriteria lain
+        if ($totalNilai > 85) {
+            return SubKriteria::where('id_kriteria', $kriteriaId)
+                ->whereIn('nama_sub_kriteria', ['Sangat Baik', 'Sangat Tinggi'])
+                ->first();
+        } elseif ($totalNilai >= 80) {
+            return SubKriteria::where('id_kriteria', $kriteriaId)
+                ->whereIn('nama_sub_kriteria', ['Baik', 'Tinggi'])
+                ->first();
+        } elseif ($totalNilai >= 70) {
+            return SubKriteria::where('id_kriteria', $kriteriaId)
+                ->where('nama_sub_kriteria', 'Cukup')
+                ->first();
+        } else {
+            return SubKriteria::where('id_kriteria', $kriteriaId)
+                ->whereIn('nama_sub_kriteria', ['Kurang', 'Rendah'])
+                ->first();
+        }
     }
 }
