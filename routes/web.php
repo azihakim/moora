@@ -31,3 +31,8 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::resource('penilaianPerbulan', PenilaianPerbulanController::class);
+Route::get('penilaianPerbulan/{periode}/{id_user}/edit', [PenilaianPerbulanController::class, 'edit']);
+Route::get('penilaianPerbulan-cek/{id}', [PenilaianPerbulanController::class, 'cekPenilaianPerbulan'])->name('penilaianPerbulan.cek');
+Route::get('penilaianPerbulan-createByUser/{id}', [PenilaianPerbulanController::class, 'createByUser'])->name('penilaianPerbulan.createByUser');
+
+Route::get('countPenilaianPerbulan/{tglDari}/{tglSampai}', [PerhitunganController::class, 'countPenilaianPerbulan'])->name('penilaianPerbulan.count');

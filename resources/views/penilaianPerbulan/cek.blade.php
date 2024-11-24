@@ -3,10 +3,11 @@
 	<div class="container-fluid">
 		<!-- Page Heading -->
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
-			<h1 class="h3 mb-0 text-gray-800">Penilaian Perbulan</h1>
+			<h1 class="h3 mb-0 text-gray-800">Penilaian Perbulan {{ $user->name }} ({{ $user->kode_alternatif }})</h1>
 		</div>
 
-		<a class="btn btn-primary mb-3" href="{{ route('penilaianPerbulan.create') }}">Tambah Penilain Perbulan</a>
+		<a class="btn btn-primary mb-3" href="{{ route('penilaianPerbulan.createByUser', $user->id) }}">Tambah Penilaian
+			Perbulan</a>
 		<!-- Content Row -->
 		<div class="row">
 			@if (session('success'))
@@ -23,16 +24,14 @@
 					</ul>
 				</div>
 			@endif
-
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-body">
 						<table class="table" id="dataTable">
 							<thead>
 								<tr>
-									<th>No</th>
-									<th>Kode Alternatif</th>
-									<th>Nama Alternatif</th>
+									<th style="width:0%">No</th>
+									<th>Periode</th>
 									<th style="width:128px">Aksi</th>
 								</tr>
 							</thead>
@@ -40,23 +39,18 @@
 								@php
 									$i = 1;
 								@endphp
-								@foreach ($users as $u)
+								@foreach ($penilaian as $p)
 									<tr>
 										<td>{{ $i++ }}</td>
-										<td>{{ $u->kode_alternatif }}</td>
-										<td>{{ $u->name }}</td>
+										<td>{{ \Carbon\Carbon::parse($p->periode)->format('d F Y') }}</td> <!-- This is the formatted periode -->
 										<td>
-											<a class="btn btn-sm btn-info" href="{{ route('penilaianPerbulan.cek', $u->id) }}">Cek
-												Penilaian</a>
-											{{-- @if ($u->penilaian()->count() > 0)
-												<button class="btn btn-sm btn-warning btn_edit" data-data='{{ $u }}'
-													data-penilaian='{{ $u->penilaian }}'>Edit</button>
-											@else
-												<button class="btn btn-sm btn-success btn_input" data-data='{{ $u }}'>Input</button>
-											@endif --}}
+											<!-- Pass the raw periode to the URL -->
+											<a class="btn btn-sm btn-warning"
+												href="{{ url('penilaianPerbulan/' . $p->periode . '/' . $p->id_user . '/edit') }}">Edit</a>
 										</td>
 									</tr>
 								@endforeach
+
 							</tbody>
 						</table>
 					</div>
@@ -70,6 +64,14 @@
 	<script>
 		$(function() {
 			$('#dataTable').DataTable();
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			setTimeout(function() {
+				$('.alert').fadeOut('slow');
+			}, 3000);
 		});
 	</script>
 @endpush

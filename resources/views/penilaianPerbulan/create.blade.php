@@ -32,16 +32,25 @@
 								@csrf
 								<div class="form-group">
 									<label>Tanggal Penilaian</label>
-									<input type="date" name="tanggal_penilaian" class="form-control">
+									<input type="date" name="tanggal_penilaian" class="form-control" required>
 								</div>
 								<div class="form-group">
 									<label>Karyawan</label>
-									<select name="karyawan" class="form-control select2">
-										<option value="" disabled selected>Pilih Karyawan</option>
-										@foreach ($user as $u)
-											<option value="{{ $u->id }}">{{ $u->name }} ({{ $u->kode_alternatif }})</option>
-										@endforeach
-									</select>
+									@if ($userById)
+										<select name="karyawan" class="form-control">
+											<option value="{{ $userById->id }}" selected>{{ $userById->name }} ({{ $userById->kode_alternatif }})
+											</option>
+										</select>
+										<input type="hidden" name="formUserById" value="True">
+									@else
+										<select name="karyawan" class="form-control select2">
+											<option value="" disabled selected>Pilih Karyawan</option>
+											@foreach ($user as $u)
+												<option value="{{ $u->id }}">{{ $u->name }} ({{ $u->kode_alternatif }})</option>
+											@endforeach
+										</select>
+									@endif
+
 								</div>
 
 								<div class="row">
@@ -69,4 +78,73 @@
 @endsection
 
 @section('scripts')
+	<script>
+		$('form').on('submit', function(e) {
+			e.preventDefault(); // Mencegah submit form secara default
+
+			let form = $(this);
+			let formData = form.serialize(); // Ambil data form
+
+			// Kirim data ke server menggunakan AJAX
+			$.ajax({
+				url: form.attr('action'),
+				method: form.attr('method'),
+				data: formData,
+				success: function(response) {
+					if (response.status === 'confirm') {
+						// Tampilkan dialog konfirmasi jika data sudah ada
+						Swal.fire({
+							title: 'Konfirmasi',
+							text: response.message ||
+								'Data sudah ada. Apakah Anda ingin memperbarui?',
+							icon: 'warning',
+							showCancelButton: true,
+							confirmButtonText: 'Ya, perbarui',
+							cancelButtonText: 'Batal',
+						}).then((result) => {
+							if (result.isConfirmed) {
+								// Kirim ulang dengan konfirmasi
+								$.ajax({
+									url: form.attr('action'),
+									method: form.attr('method'),
+									data: formData +
+										'&confirm=true', // Tambahkan flag konfirmasi
+									success: function(res) {
+										if (res.redirect_url) {
+											Swal.fire({
+												title: 'Sukses',
+												text: res.message ||
+													'Penilaian berhasil diperbarui!',
+												icon: 'success',
+											}).then(() => {
+												window.location.href = res
+													.redirect_url;
+											});
+										}
+									},
+									error: function(err) {
+										const errorMessage = err.responseJSON
+											?.message || 'Terjadi kesalahan.';
+										Swal.fire('Error', errorMessage, 'error');
+									},
+								});
+							}
+						});
+					} else if (response.redirect_url) {
+						Swal.fire({
+							title: 'Sukses',
+							text: response.message || 'Penilaian berhasil disimpan!',
+							icon: 'success',
+						}).then(() => {
+							window.location.href = response.redirect_url;
+						});
+					}
+				},
+				error: function(err) {
+					const errorMessage = err.responseJSON?.message || 'Terjadi kesalahan.';
+					Swal.fire('Error', errorMessage, 'error');
+				},
+			});
+		});
+	</script>
 @endsection

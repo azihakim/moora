@@ -14,4 +14,8 @@ class PenilaianPerbulan extends Model
         'id_kriteria',
         'nilai',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
 }

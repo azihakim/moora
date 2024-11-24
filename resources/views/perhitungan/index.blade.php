@@ -3,169 +3,69 @@
 	<div class="container-fluid">
 		<!-- Page Heading -->
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
-			<h1 class="h3 mb-0 text-gray-800">Hasil Perhitungan</h1>
+			<h1 class="h3 mb-0 text-gray-800">Perhitungan</h1>
 		</div>
 		<!-- Content Row -->
 		<div class="row mb-4">
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">Matriks Keputusan</div>
+						<div class="card-title">
+							<h4>Periode Perhitungan</h4>
+						</div>
 					</div>
 					<div class="card-body">
-						<table class="table" id="dataTable">
-							<thead>
-								<tr>
-									<th style="width:1%">No</th>
-									<th style='width:200px'>Kode Alternatif</th>
-									@foreach ($kriteria as $k)
-										<th style="text-align: center">{{ $k->kode_kriteria }}</th>
-									@endforeach
-								</tr>
-							</thead>
-							<tbody>
-								@php
-									$i = 1;
-								@endphp
-								@foreach ($matriks_keputusan as $mk)
-									<tr>
-										<td>{{ $i++ }}</td>
-										<td>{{ $mk['kode_alternatif'] }}</td>
-										@foreach ($mk['nilai'] as $n)
-											<th style="text-align: center">{{ $n[0] }}</th>
-										@endforeach
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row mb-4">
-			<div class="col-sm-12">
-				<div class="card">
-					<div class="card-header">
-						<div class="card-title">Matriks Ternormalisasi</div>
-					</div>
-					<div class="card-body">
-						<table class="table" id="dataTable2">
-							<thead>
-								<tr>
-									<th style="width:1%">No</th>
-									<th style='width:200px'>Kode Alternatif</th>
-									@foreach ($kriteria as $k)
-										<th style="text-align: center">{{ $k->kode_kriteria }}</th>
-									@endforeach
-								</tr>
-							</thead>
-							<tbody>
-								@php
-									$i = 1;
-								@endphp
-								@foreach ($matriks_ternormalisasi as $mt)
-									<tr>
-										<td>{{ $i++ }}</td>
-										<td>{{ $mt['kode_alternatif'] }}</td>
-										@foreach ($mt['nilai'] as $n)
-											<th style="text-align: center">{{ number_format($n[0], 4) }}</th>
-										@endforeach
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row mb-4">
-			<div class="col-sm-12">
-				<div class="card">
-					<div class="card-header">
-						<div class="card-title">Matriks Normalisasi Terbobot</div>
-					</div>
-					<div class="card-body">
-						<table class="table" id="dataTable3">
-							<thead>
-								<tr>
-									<th style="width:1%">No</th>
-									<th style='width:200px'>Kode Alternatif</th>
-									@foreach ($kriteria as $k)
-										<th style="text-align: center">{{ $k->kode_kriteria }}</th>
-									@endforeach
-								</tr>
-							</thead>
-							<tbody>
-								@php
-									$i = 1;
-								@endphp
-								@foreach ($matriks_normalisasi_terbobot as $mnt)
-									<tr>
-										<td>{{ $i++ }}</td>
-										<td>{{ $mnt['kode_alternatif'] }}</td>
-										@foreach ($mnt['nilai'] as $n)
-											<th style="text-align: center">{{ number_format($n[0], 4) }}</th>
-										@endforeach
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row mb-4">
-			<div class="col-sm-12">
-				<div class="card">
-					<div class="card-header">
-						<div class="card-title">Menghitung Nilai Yi</div>
-					</div>
-					<div class="card-body">
-						<table class="table" id="dataTable4">
-							<thead>
-								<tr>
-									<th style="width:1%">No</th>
-									<th>Nama Alternatif</th>
-									<th style="text-align: center">
-										Max
-										(@foreach ($kriteria as $k)
-											@if ($k->jenis == 'Benefit')
-												{{ $k->kode_kriteria }}
-											@endif
-										@endforeach)
-									</th>
-									<th style="text-align: center">
-										Min
-										(@foreach ($kriteria as $k)
-											@if ($k->jenis == 'Cost')
-												{{ $k->kode_kriteria }}
-											@endif
-										@endforeach)
-									</th>
-									<th style="text-align: center">Yi = Max - Min</th>
-								</tr>
-							</thead>
-							<tbody>
-								@php
-									$i = 1;
-								@endphp
-								@foreach ($nilai_yi as $ny)
-									<tr>
-										<td>{{ $i++ }}</td>
-										<td>{{ $ny['nama_alternatif'] }}</td>
-										<td style="text-align: center">{{ number_format($ny['max'], 4) }}</td>
-										<td style="text-align: center">{{ number_format($ny['min'], 4) }}</td>
-										<td style="text-align: center">{{ number_format($ny['yi'], 4) }}</td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label>Tanggal Dari</label>
+									<input type="date" name="tgl_dari" class="form-control" required>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label>Tanggal Sampai</label>
+									<input type="date" name="tgl_sampai" class="form-control" required>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<button class="btn btn-primary" style="margin-top: 30px">Hitung</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+@endsection
+
+@section('scripts')
+	<script>
+		$(document).ready(function() {
+			$('button').click(function() {
+				var tgl_dari = $('input[name="tgl_dari"]').val();
+				var tgl_sampai = $('input[name="tgl_sampai"]').val();
+				if (tgl_dari == '' || tgl_sampai == '') {
+					alert('Tanggal Dari dan Tanggal Sampai harus diisi');
+				} else {
+					$.ajax({
+						url: '{{ url('countPenilaianPerbulan') }}/' + tgl_dari + '/' + tgl_sampai,
+						type: 'POST',
+						data: {
+							_token: '{{ csrf_token() }}',
+							tgl_dari: tgl_dari,
+							tgl_sampai: tgl_sampai
+						},
+						success: function(data) {
+							if (data.status == 'success') {
+								alert('Perhitungan berhasil');
+							} else {
+								alert('Perhitungan gagal');
+							}
+						}
+					});
+				}
+			});
+		});
+	</script>
 @endsection
