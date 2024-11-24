@@ -36,3 +36,5 @@ Route::get('penilaianPerbulan-cek/{id}', [PenilaianPerbulanController::class, 'c
 Route::get('penilaianPerbulan-createByUser/{id}', [PenilaianPerbulanController::class, 'createByUser'])->name('penilaianPerbulan.createByUser');
 
 Route::get('countPenilaianPerbulan/{tglDari}/{tglSampai}', [PerhitunganController::class, 'countPenilaianPerbulan'])->name('penilaianPerbulan.count');
+
+Route::post('countPenilaianPerbulan', [PerhitunganController::class, 'countMoora'])->name('penilaianPerbulan.moora');

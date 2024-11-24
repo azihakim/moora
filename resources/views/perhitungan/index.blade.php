@@ -15,22 +15,23 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<form id="countMoora">
+						<form action="{{ route('penilaianPerbulan.moora') }}" method="POST">
+							@csrf
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>Tanggal Dari</label>
-										<input type="date" name="tgl_dari" class="form-control" required>
+										<input type="date" name="tglDari" class="form-control" required>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>Tanggal Sampai</label>
-										<input type="date" name="tgl_sampai" class="form-control" required>
+										<input type="date" name="tglSampai" class="form-control" required>
 									</div>
 								</div>
 								<div class="col-sm-2">
-									<button class="btn btn-primary" style="margin-top: 30px">Hitung</button>
+									<button type="submit" class="btn btn-primary" style="margin-top: 30px">Hitung</button>
 								</div>
 							</div>
 						</form>
@@ -59,15 +60,22 @@
 				</tbody>
 			</table>
 		</div> --}}
+
+		@if (isset($moora))
+			@include('perhitungan.moora')
+		@endif
 	</div>
 @endsection
 
 @section('scripts')
 	<script>
 		$(document).ready(function() {
-			$('button').click(function() {
+			$('#countMoora').submit(function(event) {
+				event.preventDefault(); // Stop the default form submission
+
 				var tgl_dari = $('input[name="tgl_dari"]').val();
 				var tgl_sampai = $('input[name="tgl_sampai"]').val();
+
 				if (tgl_dari == '' || tgl_sampai == '') {
 					alert('Tanggal Dari dan Tanggal Sampai harus diisi');
 				} else {
@@ -81,10 +89,13 @@
 						},
 						success: function(data) {
 							if (data.status == 'success') {
-								alert('Perhitungan berhasil');
+								alert(data.message); // Display success message from the server
 							} else {
 								alert('Perhitungan gagal');
 							}
+						},
+						error: function(xhr, status, error) {
+							alert('Terjadi kesalahan saat memproses permintaan');
 						}
 					});
 				}
