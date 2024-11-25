@@ -18,6 +18,11 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->date('tgl_masuk')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->string('jenis_kelamin')->nullable();
+            $table->string('agama')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('nik')->nullable();
             $table->enum('role', ['HRD', 'Pegawai', 'Direktur']);
             $table->timestamps();
         });

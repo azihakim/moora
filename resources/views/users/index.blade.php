@@ -59,11 +59,16 @@
 				const form = $("#edit_form form")
 				$("#edit_form").modal('show')
 				form.attr('action', '{{ route('users.index') }}/' + data.id)
-				form.find('input[name=name]').val(data.name)
-				form.find('input[name=tgl_masuk]').val(data.tgl_masuk)
-				form.find('input[name=username]').val(data.username)
-				form.find('input[name=kode_alternatif]').val(data.kode_alternatif)
-				form.find('select[name=role]').val(data.role)
+				form.find('input[name=name]').val(data.name);
+				form.find('input[name=tgl_masuk]').val(data.tgl_masuk);
+				form.find('input[name=username]').val(data.username);
+				form.find('input[name=no_hp]').val(data.no_hp);
+				form.find('input[name=alamat]').val(data.alamat);
+				form.find('input[name=nik]').val(data.nik);
+				form.find('select[name=jenis_kelamin]').val(data.jenis_kelamin);
+				form.find('select[name=agama]').val(data.agama);
+				form.find('select[name=role]').val(data.role);
+				form.find('input[name=kode_alternatif]').val(data.kode_alternatif);
 
 				if (form.find("select[name=role]").val() == "Pegawai") {
 					form.find("input[name=kode_alternatif]").parent().show()

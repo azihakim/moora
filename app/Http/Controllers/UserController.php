@@ -17,17 +17,29 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // Menyimpan sesi untuk menandai metode request
         Session::flash('method', 'store');
+
+        // Validasi input form
         $data = $request->validate([
             'name' => 'required',
             'username' => 'required|unique:users,username',
             'password' => 'required',
             'kode_alternatif' => 'nullable|unique:users,kode_alternatif',
             'role' => 'required',
-            'tgl_masuk' => 'required',
+            'tgl_masuk' => 'required|date',
+            'no_hp' => 'nullable|numeric',
+            'alamat' => 'nullable|string',
+            'nik' => 'nullable|numeric',
+            'jenis_kelamin' => 'required',
+            'agama' => 'required',
         ], [
             'kode_alternatif.unique' => 'Kode Alternatif sudah digunakan, silakan pilih kode yang lain.',
             'username.unique' => 'Username sudah ada, silakan pilih username yang lain.',
+            'tgl_masuk.required' => 'Tanggal Masuk wajib diisi.',
+            'tgl_masuk.date' => 'Tanggal Masuk tidak valid.',
+            'no_hp.numeric' => 'No Telepon harus berupa angka.',
+            'nik.numeric' => 'NIK harus berupa angka.',
         ]);
 
         // Hash password sebelum disimpan
@@ -36,9 +48,10 @@ class UserController extends Controller
         // Simpan data ke dalam database
         User::create($data);
 
-        // Redirect ke halaman index users
-        return redirect()->route('users.index');
+        // Redirect ke halaman index users dengan session flash pesan sukses
+        return redirect()->route('users.index')->with('status', 'Pengguna berhasil ditambahkan!');
     }
+
 
 
 
@@ -48,9 +61,14 @@ class UserController extends Controller
         Session::flash('id', $id);
         $rules = [
             'name' => 'required',
-            'username' => 'required',
+            'username' => '',
             'role' => 'required',
-            'tgl_masuk' => 'required',
+            'tgl_masuk' => 'required|date',
+            'no_hp' => 'nullable|numeric',
+            'alamat' => 'nullable|string',
+            'nik' => 'nullable|numeric',
+            'jenis_kelamin' => 'required',
+            'agama' => 'required',
         ];
         $user = User::find($id);
         if ($user->kode_alternatif !== $request->kode_alternatif) {
