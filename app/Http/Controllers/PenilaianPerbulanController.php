@@ -41,15 +41,14 @@ class PenilaianPerbulanController extends Controller
         ]);
 
         try {
-            $periode = \Carbon\Carbon::parse($request->tanggal_penilaian);
+            $periode = \Carbon\Carbon::createFromFormat('Y-m', $request->tanggal_penilaian)->startOfMonth();
 
             // Periksa jika ada data yang sudah ada
             $dataExists = false;
             foreach ($request->penilaian as $idKriteria => $nilai) {
                 $existingPenilaian = PenilaianPerbulan::where('id_user', $request->karyawan)
                     ->where('id_kriteria', $idKriteria)
-                    ->whereMonth('periode', $periode->month)
-                    ->whereYear('periode', $periode->year)
+                    ->where('periode', $periode->format('Y-m'))
                     ->exists();
 
                 if ($existingPenilaian) {

@@ -8,11 +8,20 @@ use App\Models\Penilaian;
 use App\Models\PenilaianPerbulan;
 use App\Models\SubKriteria;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PerhitunganController extends Controller
 {
-    public function index(Request $req)
+    public function index()
+    {
+        $cekPenilaian = Penilaian::first();
+        if ($cekPenilaian) {
+            return $this->perhitunganIndex();
+        }
+        return view('perhitungan.cekPeriode');
+    }
+    public function perhitunganIndex()
     {
         $alternatif = User::where(['role' => 'Pegawai'])->get();
         $kriteria = Kriteria::orderBy('id')->get();
@@ -64,7 +73,12 @@ class PerhitunganController extends Controller
             return $mnt;
         });
 
-        return view("perhitungan.index", compact('matriks_keputusan', 'matriks_ternormalisasi', 'matriks_normalisasi_terbobot', 'nilai_yi', 'kriteria'));
+        $periode = Penilaian::first()->select('periode')->first();
+        $periode = explode(' / ', $periode->periode);
+        $tglDari = $periode[0];
+        $tglSampai = $periode[1];
+
+        return view("perhitungan.index", compact('matriks_keputusan', 'matriks_ternormalisasi', 'matriks_normalisasi_terbobot', 'nilai_yi', 'kriteria', 'tglDari', 'tglSampai'));
     }
 
     public function perhitunganMoora()
@@ -126,7 +140,11 @@ class PerhitunganController extends Controller
     public function countPenilaianPerbulan($tglDari, $tglSampai)
     {
         // Ambil data penilaian dalam periode yang ditentukan
-        $nilaiPerbulan = PenilaianPerbulan::whereBetween('periode', [$tglDari, $tglSampai])
+        // $nilaiPerbulan = PenilaianPerbulan::whereBetween('periode', [$tglDari, $tglSampai])
+        //     ->get();
+        $cek = $this->cekKetersediaanDataPenilaian($tglDari, $tglSampai);
+        // dd($cek);
+        $nilaiPerbulan = PenilaianPerbulan::whereBetween('periode', [\Carbon\Carbon::parse($tglDari)->format('Y-m'), \Carbon\Carbon::parse($tglSampai)->format('Y-m')])
             ->get();
 
         // Kelompokkan data berdasarkan user_id dan kriteria_id
@@ -153,6 +171,7 @@ class PerhitunganController extends Controller
                     'id_kriteria' => $kriteriaId,
                     'id_sub_kriteria' => $subKriteria ? $subKriteria->id : null,
                     // 'id_sub_kriteria' => $totalNilai,
+                    'periode' => $tglDari . ' / ' . $tglSampai,
                 ];
             }
         }
@@ -257,8 +276,16 @@ class PerhitunganController extends Controller
     {
         $tglDari = $req->tglDari;
         $tglSampai = $req->tglSampai;
+        $cek = $this->cekKetersediaanDataPenilaian($tglDari, $tglSampai);
+        if (count($cek) > 0) {
+            $users = User::all(); // Ambil semua pengguna
+            $modalHtml = $this->generateHtmlModal($cek, $users);
+
+            return redirect()->route('perhitungan.index')->with('modalHtml', $modalHtml);
+        }
+        // dd($this->cekKetersediaanDataPenilaian($tglDari, $tglSampai));
         // Ambil data penilaian dalam periode yang ditentukan
-        $nilaiPerbulan = PenilaianPerbulan::whereBetween('periode', [$tglDari, $tglSampai])
+        $nilaiPerbulan = PenilaianPerbulan::whereBetween('periode', [\Carbon\Carbon::parse($tglDari)->format('Y-m'), \Carbon\Carbon::parse($tglSampai)->format('Y-m')])
             ->get();
 
         // Kelompokkan data berdasarkan user_id dan kriteria_id
@@ -285,6 +312,7 @@ class PerhitunganController extends Controller
                     'id_kriteria' => $kriteriaId,
                     'id_sub_kriteria' => $subKriteria ? $subKriteria->id : null,
                     // 'id_sub_kriteria' => $totalNilai,
+                    'periode' => $tglDari . ' / ' . $tglSampai,
                 ];
             }
         }
@@ -301,5 +329,108 @@ class PerhitunganController extends Controller
         $this->perhitunganMoora();
 
         return redirect()->route('perhitungan.index');
+    }
+
+    private function generateHtmlModal($data, $users)
+    {
+        $html = '
+        <div class="modal fade" id="missingDataModal" tabindex="-1" role="dialog" aria-labelledby="missingDataModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="missingDataModalLabel">Data Penilaian Tidak Lengkap</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama User</th>
+                                    <th>Periode Tidak Ada</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+        // Iterasi melalui data untuk mengisi baris tabel
+        $iteration = 1;
+        foreach ($data as $userId => $periodeTidakAda) {
+            $userName = $users->where('id', $userId)->first()->name ?? 'Tidak Diketahui';
+
+            $html .= '
+                                <tr>
+                                    <td>' . $iteration++ . '</td>
+                                    <td>' . htmlspecialchars($userName) . '</td>
+                                    <td>';
+            foreach ($periodeTidakAda as $periode) {
+                $formattedPeriode = Carbon::createFromFormat('Y-m', $periode)->locale('id')->isoFormat('MMMM YYYY');
+                $html .= '<span class="badge badge-danger">' . htmlspecialchars($formattedPeriode) . '</span> ';
+            }
+            $html .= '
+                                    </td>
+                                </tr>';
+        }
+
+        $html .= '
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>';
+
+        return $html;
+    }
+
+
+    private function cekKetersediaanDataPenilaian($tglDari, $tglSampai)
+    {
+        // Validasi input tanggal
+        $tglDari = Carbon::parse($tglDari)->format('Y-m');
+        $tglSampai = Carbon::parse($tglSampai)->format('Y-m');
+
+        // Buat daftar bulan antara tglDari dan tglSampai
+        $periodeRange = [];
+        $currentDate = Carbon::parse($tglDari);
+
+        while ($currentDate->format('Y-m') <= $tglSampai) {
+            $periodeRange[] = $currentDate->format('Y-m'); // Format tahun-bulan
+            $currentDate->addMonth();
+        }
+
+        // Ambil semua user ID
+        $userIds = PenilaianPerbulan::distinct()->pluck('id_user')->toArray();
+
+        // Tempat untuk menyimpan periode yang tidak ada beserta usernya
+        $periodeTidakAda = [];
+
+        // Periksa ketersediaan data per user
+        foreach ($userIds as $userId) {
+            // Ambil periode yang ada di database untuk user ini
+            $dataPeriode = PenilaianPerbulan::where('id_user', $userId)
+                ->whereBetween('periode', [$tglDari, $tglSampai]) // Periode adalah string dalam format Y-m
+                ->pluck('periode')
+                ->unique()
+                ->toArray();
+
+            // Cari periode yang tidak ada untuk user ini
+            $missingPeriods = array_diff($periodeRange, $dataPeriode);
+            // Jika ada periode yang tidak ada, simpan ke dalam array
+            if (!empty($missingPeriods)) {
+                $periodeTidakAda[$userId] = $missingPeriods;
+            }
+        }
+        // Jika ada periode yang tidak ada, kembalikan arraynya
+        if (!empty($periodeTidakAda)) {
+            return $periodeTidakAda;
+        }
+
+        // Jika semua user memiliki data lengkap untuk semua periode
+        return [];
     }
 }

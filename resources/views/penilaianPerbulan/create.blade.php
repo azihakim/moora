@@ -32,7 +32,7 @@
 								@csrf
 								<div class="form-group">
 									<label>Tanggal Penilaian</label>
-									<input type="date" name="tanggal_penilaian" class="form-control" required>
+									<input type="month" name="tanggal_penilaian" class="form-control" required>
 								</div>
 								<div class="form-group">
 									<label>Karyawan</label>

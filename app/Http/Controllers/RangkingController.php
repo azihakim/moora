@@ -61,6 +61,8 @@ class RangkingController extends Controller
             return $mnt;
         })->sortByDesc('yi');
 
-        return view('rangking.index', compact('nilai_yi'));
+        $periode = Penilaian::select('periode')->firstOrFail();
+
+        return view('rangking.index', compact('nilai_yi', 'periode'));
     }
 }

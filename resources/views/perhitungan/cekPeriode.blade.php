@@ -5,6 +5,21 @@
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
 			<h1 class="h3 mb-0 text-gray-800">Perhitungan</h1>
 		</div>
+		@if (session('success'))
+			<div class="alert alert-success">
+				{{ session('success') }}
+			</div>
+		@endif
+		@if ($errors->any())
+			<div class="alert alert-danger">
+				<ul>
+					@foreach ($errors->all() as $error)
+						<li>{{ $error }}</li>
+					@endforeach
+				</ul>
+			</div>
+		@endif
+
 		<!-- Content Row -->
 		<div class="row mb-4">
 			<div class="col-sm-12">
@@ -21,13 +36,13 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>Tanggal Dari</label>
-										<input type="month" name="tglDari" class="form-control" required value="{{ $tglDari }}">
+										<input type="month" name="tglDari" class="form-control" required>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>Tanggal Sampai</label>
-										<input type="month" name="tglSampai" class="form-control" required value="{{ $tglSampai }}">
+										<input type="month" name="tglSampai" class="form-control" required>
 									</div>
 								</div>
 								<div class="col-sm-2">
@@ -60,17 +75,10 @@
 				</tbody>
 			</table>
 		</div> --}}
-		@if (session('modalHtml'))
-			{!! session('modalHtml') !!}
-			<script>
-				$(document).ready(function() {
-					$('#missingDataModal').modal('show'); // Tampilkan modal saat halaman dimuat
-				});
-			</script>
-		@endif
 
-		@include('perhitungan.moora')
-
+		{{-- @if (isset($moora))
+			@include('perhitungan.moora')
+		@endif --}}
 	</div>
 @endsection
 

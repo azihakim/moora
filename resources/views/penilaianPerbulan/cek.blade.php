@@ -42,7 +42,7 @@
 								@foreach ($penilaian as $p)
 									<tr>
 										<td>{{ $i++ }}</td>
-										<td>{{ \Carbon\Carbon::parse($p->periode)->format('d F Y') }}</td> <!-- This is the formatted periode -->
+										<td>{{ \Carbon\Carbon::parse($p->periode)->format('F Y') }}</td> <!-- This is the formatted periode -->
 										<td>
 											<!-- Pass the raw periode to the URL -->
 											<a class="btn btn-sm btn-warning"

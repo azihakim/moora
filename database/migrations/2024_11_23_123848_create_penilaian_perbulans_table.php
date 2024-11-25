@@ -12,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('penilaian_perbulans', function (Blueprint $table) {
             $table->id();
-            $table->date('periode');
+            $table->string('periode');
             $table->foreignId('id_user');
             $table->foreign('id_user')->references('id')->on('users');
             $table->foreignId('id_kriteria');

@@ -34,7 +34,7 @@
 								<div class="form-group">
 									<label>Tanggal Penilaian</label>
 									<!-- Assuming you want to edit the tanggal_penilaian and pre-fill it with existing data -->
-									<input type="date" name="tanggal_penilaian" class="form-control" required
+									<input type="month" name="tanggal_penilaian" class="form-control" required
 										value="{{ old('tanggal_penilaian', $penilaian->first()->periode ?? '') }}">
 								</div>
 

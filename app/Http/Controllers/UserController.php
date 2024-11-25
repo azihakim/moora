@@ -22,13 +22,25 @@ class UserController extends Controller
             'name' => 'required',
             'username' => 'required|unique:users,username',
             'password' => 'required',
-            'kode_alternatif' => '',
+            'kode_alternatif' => 'nullable|unique:users,kode_alternatif',
             'role' => 'required',
+            'tgl_masuk' => 'required',
+        ], [
+            'kode_alternatif.unique' => 'Kode Alternatif sudah digunakan, silakan pilih kode yang lain.',
+            'username.unique' => 'Username sudah ada, silakan pilih username yang lain.',
         ]);
+
+        // Hash password sebelum disimpan
         $data['password'] = Hash::make($data['password']);
+
+        // Simpan data ke dalam database
         User::create($data);
+
+        // Redirect ke halaman index users
         return redirect()->route('users.index');
     }
+
+
 
     public function update(Request $request, $id)
     {
@@ -37,16 +49,29 @@ class UserController extends Controller
         $rules = [
             'name' => 'required',
             'username' => 'required',
-            'kode_alternatif' => '',
             'role' => 'required',
+            'tgl_masuk' => 'required',
         ];
+        $user = User::find($id);
+        if ($user->kode_alternatif !== $request->kode_alternatif) {
+            $rules['kode_alternatif'] = 'nullable|unique:users,kode_alternatif';
+        }
+        $messages = [
+            'kode_alternatif.unique' => 'Kode Alternatif sudah digunakan, silakan pilih kode yang lain.',
+            'username.unique' => 'Username sudah ada, silakan pilih username yang lain.',
+        ];
+
+
+        $data = $request->validate($rules, $messages);
 
         $user = User::find($id);
         if ($user->username !== $request->username) {
             $rules['username'] = 'required|unique:users,username';
         }
         $data = $request->validate($rules);
-        $data['password'] = Hash::make($data['password']);
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
         $user->update($data);
         return redirect()->route('users.index');
     }

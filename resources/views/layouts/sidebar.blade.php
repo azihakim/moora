@@ -36,15 +36,15 @@
                 <span>Alternatif</span></a>
         </li> --}}
 
-		<li class="nav-item">
+		{{-- <li class="nav-item">
 			<a class="nav-link" href="{{ route('penilaian.index') }}">
 				<i class="fas fa-fw fa-clipboard-list"></i>
 				<span>Penilaian</span></a>
-		</li>
+		</li> --}}
 		<li class="nav-item">
 			<a class="nav-link" href="{{ route('penilaianPerbulan.index') }}">
 				<i class="fas fa-fw fa-clipboard-list"></i>
-				<span>Penilaian Perbulan</span></a>
+				<span>Penilaian</span></a>
 		</li>
 
 		<li class="nav-item">

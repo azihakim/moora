@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('id_kriteria')->references('id')->on('kriteria');
             $table->foreignId('id_sub_kriteria')->nullable();
             $table->foreign('id_sub_kriteria')->references('id')->on('sub_kriteria');
+            $table->string('periode')->nullable();
             $table->timestamps();
         });
     }
