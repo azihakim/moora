@@ -6,6 +6,7 @@ use App\Models\Alternatif;
 use App\Models\Kriteria;
 use App\Models\Penilaian;
 use App\Models\PenilaianPerbulan;
+use App\Models\RekapPenilaian;
 use App\Models\SubKriteria;
 use App\Models\User;
 use Carbon\Carbon;
@@ -81,7 +82,7 @@ class PerhitunganController extends Controller
         return view("perhitungan.index", compact('matriks_keputusan', 'matriks_ternormalisasi', 'matriks_normalisasi_terbobot', 'nilai_yi', 'kriteria', 'tglDari', 'tglSampai'));
     }
 
-    public function perhitunganMoora()
+    public function perhitunganMoora($tglDari, $tglSampai)
     {
         $alternatif = User::where(['role' => 'Pegawai'])->get();
         $kriteria = Kriteria::orderBy('id')->get();
@@ -133,6 +134,24 @@ class PerhitunganController extends Controller
             return $mnt;
         });
 
+        $data = [
+            'matriks_keputusan' => $matriks_keputusan,
+            'matriks_ternormalisasi' => $matriks_ternormalisasi,
+            'matriks_normalisasi_terbobot' => $matriks_normalisasi_terbobot,
+            'nilai_yi' => $nilai_yi,
+            'kriteria' => $kriteria,
+        ];
+
+        RekapPenilaian::updateOrCreate(
+            // Kriteria pencarian (jika ada data dengan periode yang sama)
+            ['periode' => $tglDari . ' / ' . $tglSampai],
+
+            // Data yang akan diperbarui atau dibuat
+            [
+                'data' => json_encode($data),
+            ]
+        );
+
         $moora = True;
         // return view("perhitungan.index", compact('matriks_keputusan', 'matriks_ternormalisasi', 'matriks_normalisasi_terbobot', 'nilai_yi', 'kriteria', 'moora'));
     }
@@ -176,13 +195,6 @@ class PerhitunganController extends Controller
             }
         }
 
-        // Pastikan tidak ada duplikasi data (jika ada user yang sama dan kriteria yang sama)
-        // $penilaianData = collect($penilaianData)->unique(function ($item) {
-        //     return $item['id_user'] . '-' . $item['id_kriteria']; // Menghindari duplikasi berdasarkan kombinasi user dan kriteria
-        // })->values()->all();
-
-        // dd($penilaianData);
-
         // Simpan semua penilaian untuk user pada periode tertentu
         Penilaian::truncate();
 
@@ -190,7 +202,7 @@ class PerhitunganController extends Controller
             Penilaian::create($data);
         }
 
-        $this->perhitunganMoora();
+        $this->perhitunganMoora($tglDari, $tglSampai);
 
 
         // return response()->json([
@@ -326,7 +338,9 @@ class PerhitunganController extends Controller
             Penilaian::create($data);
         }
 
-        $this->perhitunganMoora();
+
+
+        $this->perhitunganMoora($tglDari, $tglSampai);
 
         return redirect()->route('perhitungan.index');
     }

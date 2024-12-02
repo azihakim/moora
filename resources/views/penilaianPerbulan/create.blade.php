@@ -54,13 +54,25 @@
 								</div>
 
 								<div class="row">
-									@foreach ($kriteria as $k)
+									{{-- @foreach ($kriteria as $k)
 										<div class="col-sm-6">
 											<div class="form-group">
 												<label>{{ $k->nama_kriteria }}</label>
 												<input type="number" name="penilaian[{{ $k->id }}]" class="form-control" required value="1">
 											</div>
 										</div>
+									@endforeach --}}
+									@foreach ($kriteria as $k)
+										@if ($k->kode_kriteria === 'C6')
+											<input type="hidden" name="penilaian[{{ $k->id }}]" value="0">
+										@else
+											<div class="col-sm-6">
+												<div class="form-group">
+													<label>{{ $k->nama_kriteria }}</label>
+													<input type="number" name="penilaian[{{ $k->id }}]" class="form-control" required>
+												</div>
+											</div>
+										@endif
 									@endforeach
 								</div>
 							</div>

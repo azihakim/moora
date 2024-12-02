@@ -9,6 +9,8 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenilaianPerbulanController;
 use App\Http\Controllers\PerhitunganController;
 use App\Http\Controllers\RangkingController;
+use App\Http\Controllers\RekapController;
+use App\Http\Controllers\RekapPenilaianController;
 use App\Http\Controllers\SubKriteriaController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,3 +40,9 @@ Route::get('penilaianPerbulan-createByUser/{id}', [PenilaianPerbulanController::
 Route::get('countPenilaianPerbulan/{tglDari}/{tglSampai}', [PerhitunganController::class, 'countPenilaianPerbulan'])->name('penilaianPerbulan.count');
 
 Route::post('countPenilaianPerbulan', [PerhitunganController::class, 'countMoora'])->name('penilaianPerbulan.moora');
+
+// Route::get('rekap-hrd/{tglDari}/{tglSampai}', [RekapPenilaianController::class, 'rekapHrd'])->name('rekap.hrd');
+
+Route::get('rekap-hrd/{id}', [RekapPenilaianController::class, 'rekapHrd'])->name('rekapHrd');
+Route::get('rekap-perbulan/{id}', [RekapPenilaianController::class, 'rekapPerbulan'])->name('rekapPerbulan');
+Route::resource('rekap', RekapPenilaianController::class);

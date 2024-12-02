@@ -58,6 +58,12 @@
 				<i class="fas fa-fw fa-trophy"></i>
 				<span>Rangking</span></a>
 		</li>
+
+		<li class="nav-item">
+			<a class="nav-link" href="{{ route('rekap.index') }}">
+				<i class="fas fa-fw fa-edit"></i>
+				<span>Rekap Penilaian</span></a>
+		</li>
 	@endif
 
 	@if (auth()->user()->role == 'Pegawai')
@@ -70,6 +76,11 @@
 			<a class="nav-link" href="{{ route('rangking.index') }}">
 				<i class="fas fa-fw fa-trophy"></i>
 				<span>Rangking</span></a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ route('rekap.index') }}">
+				<i class="fas fa-fw fa-edit"></i>
+				<span>Rekap Penilaian</span></a>
 		</li>
 	@endif
 
@@ -88,6 +99,11 @@
 			<a class="nav-link" href="{{ route('rangking.index') }}">
 				<i class="fas fa-fw fa-trophy"></i>
 				<span>Rangking</span></a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ route('rekap.index') }}">
+				<i class="fas fa-fw fa-edit"></i>
+				<span>Rekap Penilaian</span></a>
 		</li>
 	@endif
 

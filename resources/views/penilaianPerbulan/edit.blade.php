@@ -49,7 +49,7 @@
 								</div>
 
 								<div class="row">
-									@foreach ($kriteria as $k)
+									{{-- @foreach ($kriteria as $k)
 										<div class="col-sm-6">
 											<div class="form-group">
 												<label>{{ $k->nama_kriteria }}</label>
@@ -57,7 +57,27 @@
 													value="{{ old('penilaian[' . $k->id . ']', $penilaian->where('id_kriteria', $k->id)->first()->nilai ?? 0) }}">
 											</div>
 										</div>
+									@endforeach --}}
+									@foreach ($kriteria as $k)
+										@if ($k->kode_kriteria === 'C6')
+											<div class="col-sm-6">
+												<div class="form-group">
+													<label>{{ $k->nama_kriteria }}</label>
+													<input type="number" class="form-control" name="penilaian[{{ $k->id }}]"
+														value="{{ old('penilaian[' . $k->id . ']', $penilaian->where('id_kriteria', $k->id)->first()->nilai ?? 0) }}">
+												</div>
+											</div>
+										@else
+											<div class="col-sm-6">
+												<div class="form-group">
+													<label>{{ $k->nama_kriteria }}</label>
+													<input type="number" name="penilaian[{{ $k->id }}]" class="form-control" required
+														value="{{ old('penilaian[' . $k->id . ']', $penilaian->where('id_kriteria', $k->id)->first()->nilai ?? 0) }}">
+												</div>
+											</div>
+										@endif
 									@endforeach
+
 								</div>
 							</div>
 

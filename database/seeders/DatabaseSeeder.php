@@ -136,7 +136,7 @@ class DatabaseSeeder extends Seeder
             ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 3, 'nilai' => 90],
             ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 4, 'nilai' => 150],
             ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 5, 'nilai' => 100],
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 80],
+            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 1],
             ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 7, 'nilai' => 70],
 
             ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 1, 'nilai' => 80],
@@ -144,7 +144,7 @@ class DatabaseSeeder extends Seeder
             ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 3, 'nilai' => 90],
             ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 4, 'nilai' => 150],
             ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 5, 'nilai' => 60],
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 80],
+            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 1],
             ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 7, 'nilai' => 50],
 
             ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 1, 'nilai' => 60],
@@ -152,7 +152,7 @@ class DatabaseSeeder extends Seeder
             ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 3, 'nilai' => 90],
             ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 4, 'nilai' => 100],
             ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 5, 'nilai' => 70],
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 80],
+            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 1],
             ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 7, 'nilai' => 80],
 
             ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 1, 'nilai' => 100],
@@ -160,7 +160,7 @@ class DatabaseSeeder extends Seeder
             ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 3, 'nilai' => 100],
             ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 4, 'nilai' => 175],
             ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 5, 'nilai' => 50],
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 90],
+            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 1],
             ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 7, 'nilai' => 80],
         ];
 

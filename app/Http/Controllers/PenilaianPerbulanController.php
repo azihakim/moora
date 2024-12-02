@@ -7,6 +7,7 @@ use App\Models\PenilaianPerbulan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PenilaianPerbulanController extends Controller
 {
@@ -67,6 +68,12 @@ class PenilaianPerbulanController extends Controller
 
             // Lanjutkan untuk memperbarui atau menyimpan data
             foreach ($request->penilaian as $idKriteria => $nilai) {
+                if ($idKriteria == 6) {
+                    $tglMasuk = User::find($request->karyawan)->tgl_masuk;
+                    $masaKerja = \Carbon\Carbon::parse($tglMasuk)->diffInYears(\Carbon\Carbon::now());
+                    $nilai = $masaKerja;
+                }
+
                 $existingPenilaian = PenilaianPerbulan::where('id_user', $request->karyawan)
                     ->where('id_kriteria', $idKriteria)
                     ->whereMonth('periode', $periode->month)
