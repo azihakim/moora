@@ -40,7 +40,15 @@ class PenilaianPerbulanController extends Controller
             'penilaian' => 'required|array',
             'penilaian.*' => 'required|numeric',
         ]);
-
+        $tgl_masuk = User::where('id', $request->karyawan)->first()->tgl_masuk;
+        if (\Carbon\Carbon::createFromFormat('Y-m', $request->tanggal_penilaian)->startOfMonth() < \Carbon\Carbon::createFromFormat('Y-m-d', $tgl_masuk)->startOfMonth()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Tanggal penilaian tidak boleh kurang dari tanggal masuk karyawan',
+                ], 422);
+            }
+        }
         try {
             $periode = \Carbon\Carbon::createFromFormat('Y-m', $request->tanggal_penilaian)->startOfMonth();
 
