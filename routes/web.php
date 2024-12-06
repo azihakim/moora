@@ -46,3 +46,4 @@ Route::post('countPenilaianPerbulan', [PerhitunganController::class, 'countMoora
 Route::get('rekap-hrd/{id}', [RekapPenilaianController::class, 'rekapHrd'])->name('rekapHrd');
 Route::get('rekap-perbulan/{id}', [RekapPenilaianController::class, 'rekapPerbulan'])->name('rekapPerbulan');
 Route::resource('rekap', RekapPenilaianController::class);
+Route::put('rekap-validasi/{id}', [RekapPenilaianController::class, 'updateStatus'])->name('rekap.updateStatus');

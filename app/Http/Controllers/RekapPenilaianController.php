@@ -10,6 +10,7 @@ use Illuminate\Container\Attributes\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class RekapPenilaianController extends Controller
 {
@@ -194,53 +195,26 @@ class RekapPenilaianController extends Controller
     public function index()
     {
         $data = RekapPenilaian::all();
+        if (Auth::user()->role != 'Direktur') {
+            $data = RekapPenilaian::where('status', 1)->get();
+        }
         // dd($data);
         return view('rekap.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateStatus(Request $request, $id)
     {
-        //
+        $rekap = RekapPenilaian::find($id);
+        if ($rekap) {
+            $rekap->status = $request->status;
+            $rekap->save();
+            return redirect()->route('rekap.index')->with('success', 'Status rekap berhasil diubah.');
+        } else {
+            return redirect()->route('rekap.index')->with('error', 'Data rekap tidak ditemukan.');
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(RekapPenilaian $rekapPenilaian)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(RekapPenilaian $rekapPenilaian)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, RekapPenilaian $rekapPenilaian)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(RekapPenilaian $rekapPenilaian)
     {
         //

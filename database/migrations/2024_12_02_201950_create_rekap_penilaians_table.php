@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('periode');
             $table->string('rekap_pdf')->nullable();
             $table->string('rekap_perbulan_pdf')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
         });
     }
