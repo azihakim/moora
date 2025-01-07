@@ -70,7 +70,7 @@
 						<div class="form-group col-sm-6">
 							<label>Kode Alternatif</label>
 							<input type="text" name="kode_alternatif" class="form-control" placeholder="Masukkan Kode Alternatif"
-								value="{{ old('kode_alternatif') }}">
+								value="{{ old('kode_alternatif') }}" id="kode_alternatif" readonly>
 							<small class="text-danger">{{ $errors->first('kode_alternatif') }}</small>
 						</div>
 					</div>

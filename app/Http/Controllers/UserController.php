@@ -100,4 +100,21 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index');
     }
+    public function generateKodeUser(Request $request)
+    {
+        // Ambil data terakhir dari tabel user berdasarkan kode alternatif
+        $lastUser = User::latest('id')->first();
+
+        if ($lastUser) {
+            // Ambil angka terakhir dari kode alternatif dan tambahkan 1
+            $lastNumber = (int) str_replace('A', '', $lastUser->kode_alternatif);
+            $newKode = 'A' . ($lastNumber + 1);
+        } else {
+            // Jika belum ada data, mulai dari A1
+            $newKode = 'A1';
+        }
+
+        // Kirim data sebagai respon JSON
+        return response()->json(['kode_alternatif' => $newKode]);
+    }
 }

@@ -49,6 +49,34 @@
 
 @push('scripts')
 	<script>
+		$(document).ready(function() {
+			$('#btn_add').on('click', function() {
+				// Panggil endpoint untuk mendapatkan kode alternatif
+				$.ajax({
+					url: '/get-kode-user',
+					type: 'GET',
+					dataType: 'json',
+					success: function(data) {
+						// Isi kolom kode alternatif di modal
+						$('#kode_alternatif').val(data.kode_alternatif);
+						// Tampilkan modal
+						$('#modalUser').modal('show');
+					},
+					error: function(xhr, status, error) {
+						console.error('Terjadi kesalahan:', error);
+					}
+				});
+			});
+
+			// Submit form user (opsional)
+			$('#formUser').on('submit', function(e) {
+				e.preventDefault();
+				// Lakukan sesuatu dengan data form
+				console.log($(this).serialize());
+			});
+		});
+	</script>
+	<script>
 		$(function() {
 			$('#dataTable').DataTable();
 			$('#btn_add').on('click', function() {

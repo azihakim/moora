@@ -47,3 +47,5 @@ Route::get('rekap-hrd/{id}', [RekapPenilaianController::class, 'rekapHrd'])->nam
 Route::get('rekap-perbulan/{id}', [RekapPenilaianController::class, 'rekapPerbulan'])->name('rekapPerbulan');
 Route::resource('rekap', RekapPenilaianController::class);
 Route::put('rekap-validasi/{id}', [RekapPenilaianController::class, 'updateStatus'])->name('rekap.updateStatus');
+Route::get('/get-kode-kriteria', [KriteriaController::class, 'generateKodeKriteria']);
+Route::get('/get-kode-user', [UserController::class, 'generateKodeUser']);

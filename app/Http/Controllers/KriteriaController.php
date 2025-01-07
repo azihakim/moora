@@ -52,4 +52,22 @@ class KriteriaController extends Controller
         $kriteria->delete();
         return redirect()->route('kriteria.index');
     }
+
+    public function generateKodeKriteria(Request $request)
+    {
+        // Ambil jumlah data terakhir di tabel kriteria
+        $lastKriteria = Kriteria::latest('id')->first();
+
+        if ($lastKriteria) {
+            // Ambil angka terakhir dari kode kriteria dan tambahkan 1
+            $lastNumber = (int) str_replace('C', '', $lastKriteria->kode_kriteria);
+            $newKode = 'C' . ($lastNumber + 1);
+        } else {
+            // Jika belum ada data, mulai dari C1
+            $newKode = 'C1';
+        }
+
+        // Kirim data ke respon JSON
+        return response()->json(['kode_kriteria' => $newKode]);
+    }
 }

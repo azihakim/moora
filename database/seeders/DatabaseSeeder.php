@@ -29,25 +29,25 @@ class DatabaseSeeder extends Seeder
             'role' => 'Direktur'
         ]);
 
-        $alternatif = [
-            [
-                'name' => 'Pegawai 1',
-                'kode_alternatif' => 'A1',
-                'tgl_masuk' => '2020-11-24',
-                'role' => 'Pegawai',
-                'username' => 'pegawai1',
-                'password' => bcrypt('123'),
-            ],
-            [
-                'name' => 'Pegawai 2',
-                'kode_alternatif' => 'A2',
-                'tgl_masuk' => '2024-11-24',
-                'role' => 'Pegawai',
-                'username' => 'pegawai2',
-                'password' => bcrypt('123'),
-            ]
-        ];
-        DB::table('users')->insert($alternatif);
+        // $alternatif = [
+        //     [
+        //         'name' => 'Pegawai 1',
+        //         'kode_alternatif' => 'A1',
+        //         'tgl_masuk' => '2020-11-24',
+        //         'role' => 'Pegawai',
+        //         'username' => 'pegawai1',
+        //         'password' => bcrypt('123'),
+        //     ],
+        //     [
+        //         'name' => 'Pegawai 2',
+        //         'kode_alternatif' => 'A2',
+        //         'tgl_masuk' => '2024-11-24',
+        //         'role' => 'Pegawai',
+        //         'username' => 'pegawai2',
+        //         'password' => bcrypt('123'),
+        //     ]
+        // ];
+        // DB::table('users')->insert($alternatif);
 
         $kriteria = [
             [
