@@ -57,13 +57,21 @@
 					type: 'GET',
 					dataType: 'json',
 					success: function(data) {
-						// Isi kolom kode alternatif di modal
-						$('#kode_alternatif').val(data.kode_alternatif);
+						if (data.kode_alternatif) {
+							// Isi kolom kode alternatif di modal jika respon berhasil
+							$('#kode_alternatif').val(data.kode_alternatif);
+						} else {
+							// Jika tidak ada data, set default A1
+							$('#kode_alternatif').val('A1');
+						}
 						// Tampilkan modal
 						$('#modalUser').modal('show');
 					},
 					error: function(xhr, status, error) {
 						console.error('Terjadi kesalahan:', error);
+						// Jika terjadi error, fallback ke A1
+						$('#kode_alternatif').val('A1');
+						$('#modalUser').modal('show');
 					}
 				});
 			});
