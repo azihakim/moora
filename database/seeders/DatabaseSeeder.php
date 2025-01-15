@@ -16,38 +16,40 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::create([
-            'name' => 'HRD',
-            'username' => 'hrd',
-            'password' => bcrypt('hrd'),
-            'role' => 'HRD'
-        ]);
-        User::create([
-            'name' => 'Direktur',
-            'username' => 'direktur',
-            'password' => bcrypt('direktur'),
-            'role' => 'Direktur'
-        ]);
+        $users = [
+            [
+                'name' => 'HRD',
+                'username' => 'hrd',
+                'password' => bcrypt('hrd'),
+                'role' => 'HRD'
+            ],
+            [
+                'name' => 'Direktur',
+                'username' => 'direktur',
+                'password' => bcrypt('direktur'),
+                'role' => 'Direktur'
+            ]
+        ];
 
-        // $alternatif = [
-        //     [
-        //         'name' => 'Pegawai 1',
-        //         'kode_alternatif' => 'A1',
-        //         'tgl_masuk' => '2020-11-24',
-        //         'role' => 'Pegawai',
-        //         'username' => 'pegawai1',
-        //         'password' => bcrypt('123'),
-        //     ],
-        //     [
-        //         'name' => 'Pegawai 2',
-        //         'kode_alternatif' => 'A2',
-        //         'tgl_masuk' => '2024-11-24',
-        //         'role' => 'Pegawai',
-        //         'username' => 'pegawai2',
-        //         'password' => bcrypt('123'),
-        //     ]
-        // ];
-        // DB::table('users')->insert($alternatif);
+
+        $alternatif = [
+            [
+                'name' => 'Pegawai 1',
+                'kode_alternatif' => 'A1',
+                'tgl_masuk' => '2025-01-01',
+                'role' => 'Pegawai',
+                'username' => 'pegawai1',
+                'password' => bcrypt('123'),
+            ],
+            [
+                'name' => 'Pegawai 2',
+                'kode_alternatif' => 'A2',
+                'tgl_masuk' => '2025-01-01',
+                'role' => 'Pegawai',
+                'username' => 'pegawai2',
+                'password' => bcrypt('123'),
+            ]
+        ];
 
         $kriteria = [
             [
@@ -94,7 +96,6 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        DB::table('kriteria')->insert($kriteria);
 
         $subkriteria = [
             ['id_kriteria' => 1, 'nama_sub_kriteria' => 'Sangat Baik', 'nilai' => 4],
@@ -127,43 +128,47 @@ class DatabaseSeeder extends Seeder
             ['id_kriteria' => 7, 'nama_sub_kriteria' => 'Kurang', 'nilai' => 1],
         ];
 
-        DB::table('sub_kriteria')->insert($subkriteria);
 
 
         $penilaianPerbulan = [
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 1, 'nilai' => 100],
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 2, 'nilai' => 70],
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 3, 'nilai' => 90],
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 4, 'nilai' => 150],
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 5, 'nilai' => 100],
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 1],
-            ['periode' => '2024-11', 'id_user' => 3, 'id_kriteria' => 7, 'nilai' => 70],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 1, 'nilai' => 100],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 2, 'nilai' => 70],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 3, 'nilai' => 90],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 4, 'nilai' => 150],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 5, 'nilai' => 100],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 1],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 7, 'nilai' => 70],
 
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 1, 'nilai' => 80],
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 2, 'nilai' => 70],
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 3, 'nilai' => 90],
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 4, 'nilai' => 150],
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 5, 'nilai' => 60],
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 1],
-            ['periode' => '2024-12', 'id_user' => 3, 'id_kriteria' => 7, 'nilai' => 50],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 1, 'nilai' => 80],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 2, 'nilai' => 70],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 3, 'nilai' => 90],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 4, 'nilai' => 150],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 5, 'nilai' => 60],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 6, 'nilai' => 1],
+            ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 7, 'nilai' => 50],
 
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 1, 'nilai' => 60],
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 2, 'nilai' => 100],
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 3, 'nilai' => 90],
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 4, 'nilai' => 100],
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 5, 'nilai' => 70],
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 1],
-            ['periode' => '2024-11', 'id_user' => 4, 'id_kriteria' => 7, 'nilai' => 80],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 1, 'nilai' => 60],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 2, 'nilai' => 100],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 3, 'nilai' => 90],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 4, 'nilai' => 100],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 5, 'nilai' => 70],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 1],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 7, 'nilai' => 80],
 
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 1, 'nilai' => 100],
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 2, 'nilai' => 100],
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 3, 'nilai' => 100],
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 4, 'nilai' => 175],
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 5, 'nilai' => 50],
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 1],
-            ['periode' => '2024-12', 'id_user' => 4, 'id_kriteria' => 7, 'nilai' => 80],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 1, 'nilai' => 100],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 2, 'nilai' => 100],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 3, 'nilai' => 100],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 4, 'nilai' => 175],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 5, 'nilai' => 50],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 6, 'nilai' => 1],
+            ['periode' => '2025-01', 'id_user' => 4, 'id_kriteria' => 7, 'nilai' => 80],
         ];
 
+
+        DB::table('users')->insert($users);
+        DB::table('users')->insert($alternatif);
+        DB::table('kriteria')->insert($kriteria);
+        DB::table('sub_kriteria')->insert($subkriteria);
         DB::table('penilaian_perbulans')->insert($penilaianPerbulan);
     }
 }
