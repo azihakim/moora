@@ -221,19 +221,19 @@ class PerhitunganController extends Controller
             $absenPercentage = ($totalNilai / 312) * 100; // hitung persentase absensi berdasarkan 312 hari kerja
             if ($absenPercentage > 95) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '>95%')
+                    ->where('nama_sub_kriteria', 'A>95%')
                     ->first();
             } elseif ($absenPercentage >= 90) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '<95%')
+                    ->where('nama_sub_kriteria', '90%≤A<95%')
                     ->first();
             } elseif ($absenPercentage >= 80) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '≥80%')
+                    ->where('nama_sub_kriteria', '80%≤A<90%')
                     ->first();
             } else {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '<80%')
+                    ->where('nama_sub_kriteria', 'A<80%')
                     ->first();
             }
         }
