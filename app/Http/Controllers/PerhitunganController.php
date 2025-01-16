@@ -246,19 +246,19 @@ class PerhitunganController extends Controller
 
             if ($masaKerja > 5) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '> 5 tahun')
+                    ->where('nilai', 4)
                     ->first();  // Sangat Baik
             } elseif ($masaKerja > 3) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '3 < Masa Kerja ≤ 5')
+                    ->where('nilai', 3)
                     ->first();  // Baik
             } elseif ($masaKerja > 1) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '1 < Masa Kerja ≤ 3')
+                    ->where('nilai', 2)
                     ->first();  // Cukup
             } else {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '≤ 1 tahun')
+                    ->where('nilai', 1)
                     ->first();  // Kurang
             }
         }
@@ -266,20 +266,20 @@ class PerhitunganController extends Controller
         // Skala nilai untuk kriteria lain
         if ($totalNilai > 85) {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->whereIn('nama_sub_kriteria', ['Sangat Baik', 'Sangat Tinggi'])
-                ->first();
+            ->where('nilai', 4)
+            ->first();
         } elseif ($totalNilai >= 80) {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->whereIn('nama_sub_kriteria', ['Baik', 'Tinggi'])
-                ->first();
+            ->where('nilai', 3)
+            ->first();
         } elseif ($totalNilai >= 70) {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->where('nama_sub_kriteria', 'Cukup')
-                ->first();
+            ->where('nilai', 2)
+            ->first();
         } else {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->whereIn('nama_sub_kriteria', ['Kurang', 'Rendah'])
-                ->first();
+            ->where('nilai', 1)
+            ->first();
         }
     }
 
