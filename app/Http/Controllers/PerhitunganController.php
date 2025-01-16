@@ -183,7 +183,6 @@ class PerhitunganController extends Controller
 
                 // Tentukan sub-kriteria berdasarkan total nilai
                 $subKriteria = $this->getSubKriteria($kriteriaId, $totalNilai, $userId);
-
                 // Simpan data penilaian yang telah diproses (hanya satu data untuk setiap kombinasi user dan kriteria)
                 $penilaianData[] = [
                     'id_user' => $userId,
@@ -216,6 +215,24 @@ class PerhitunganController extends Controller
 
     private function getSubKriteria($kriteriaId, $totalNilai, $userId)
     {
+        // Skala nilai untuk kriteria lain
+        if (in_array($kriteriaId, [1, 2, 3, 5, 7])) {
+            if ($totalNilai > 85) {
+                $nilai = 4;
+            } elseif ($totalNilai >= 80) {
+                $nilai = 3;
+            } elseif ($totalNilai >= 70) {
+                $nilai = 2;
+            } else {
+                $nilai = 1;
+            }
+
+            return SubKriteria::where('id_kriteria', $kriteriaId)
+                ->where('nilai', $nilai)
+                ->first();
+        }
+
+
         // kehadiran: absensi dalam persen
         if ($kriteriaId == 4) {
             $absenPercentage = ($totalNilai / 312) * 100; // hitung persentase absensi berdasarkan 312 hari kerja
@@ -262,25 +279,6 @@ class PerhitunganController extends Controller
                     ->first();  // Kurang
             }
         }
-
-        // Skala nilai untuk kriteria lain
-        if ($totalNilai > 85) {
-            return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->where('nilai', 4)
-                ->first();
-        } elseif ($totalNilai >= 80) {
-            return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->where('nilai', 3)
-                ->first();
-        } elseif ($totalNilai >= 70) {
-            return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->where('nilai', 2)
-                ->first();
-        } else {
-            return SubKriteria::where('id_kriteria', $kriteriaId)
-                ->where('nilai', 1)
-                ->first();
-        }
     }
 
 
@@ -311,9 +309,9 @@ class PerhitunganController extends Controller
             foreach ($kriterias as $kriteriaId => $items) {
                 // Hitung total nilai untuk kriteria tertentu dari periode yang ditentukan
                 $totalNilai = $items->sum('nilai');
-                if ($kriteriaId != 4) {
-                    $totalNilai /= 2;
-                }
+                // if ($kriteriaId != 4) {
+                //     $totalNilai /= 2;
+                // }
 
                 // Tentukan sub-kriteria berdasarkan total nilai
                 $subKriteria = $this->getSubKriteria($kriteriaId, $totalNilai, $userId);
