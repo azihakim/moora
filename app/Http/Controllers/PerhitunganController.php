@@ -221,19 +221,19 @@ class PerhitunganController extends Controller
             $absenPercentage = ($totalNilai / 312) * 100; // hitung persentase absensi berdasarkan 312 hari kerja
             if ($absenPercentage > 95) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', 'A>95%')
+                    ->where('nilai', 4)
                     ->first();
             } elseif ($absenPercentage >= 90) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '90%≤A<95%')
+                    ->where('nilai', 3)
                     ->first();
             } elseif ($absenPercentage >= 80) {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', '80%≤A<90%')
+                    ->where('nilai', 2)
                     ->first();
             } else {
                 return SubKriteria::where('id_kriteria', $kriteriaId)
-                    ->where('nama_sub_kriteria', 'A<80%')
+                    ->where('nilai', 1)
                     ->first();
             }
         }
@@ -266,20 +266,20 @@ class PerhitunganController extends Controller
         // Skala nilai untuk kriteria lain
         if ($totalNilai > 85) {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-            ->where('nilai', 4)
-            ->first();
+                ->where('nilai', 4)
+                ->first();
         } elseif ($totalNilai >= 80) {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-            ->where('nilai', 3)
-            ->first();
+                ->where('nilai', 3)
+                ->first();
         } elseif ($totalNilai >= 70) {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-            ->where('nilai', 2)
-            ->first();
+                ->where('nilai', 2)
+                ->first();
         } else {
             return SubKriteria::where('id_kriteria', $kriteriaId)
-            ->where('nilai', 1)
-            ->first();
+                ->where('nilai', 1)
+                ->first();
         }
     }
 
