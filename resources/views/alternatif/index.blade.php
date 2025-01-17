@@ -31,7 +31,7 @@
 										<td>{{ $a->nama_alternatif }}</td>
 										<td>
 											<button class="btn btn-sm btn-warning btn_edit" data-data='{{ $a }}'>Edit</button>
-											<button class="btn btn-sm btn-danger btn_delete" data-id='{{ $a->id }}'>Delete</button>
+											{{-- <button class="btn btn-sm btn-danger btn_delete" data-id='{{ $a->id }}'>Delete</button> --}}
 										</td>
 									</tr>
 								@endforeach

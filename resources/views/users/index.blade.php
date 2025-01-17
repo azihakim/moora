@@ -30,7 +30,7 @@
 										<td>{{ $u->role }}</td>
 										<td>
 											<button class="btn btn-sm btn-warning btn_edit" data-data='{{ $u }}'>Edit</button>
-											<button class="btn btn-sm btn-danger btn_delete" data-id='{{ $u->id }}'>Delete</button>
+											{{-- <button class="btn btn-sm btn-danger btn_delete" data-id='{{ $u->id }}'>Delete</button> --}}
 										</td>
 									</tr>
 								@endforeach
