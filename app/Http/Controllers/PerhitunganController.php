@@ -286,6 +286,8 @@ class PerhitunganController extends Controller
     {
         $tglDari = $req->tglDari;
         $tglSampai = $req->tglSampai;
+        $jumlahBulan = round(Carbon::parse($tglDari)->diffInMonths(Carbon::parse($tglSampai)->endOfMonth()));
+
         $cek = $this->cekKetersediaanDataPenilaian($tglDari, $tglSampai);
         if (count($cek) > 0) {
             $users = User::all(); // Ambil semua pengguna
@@ -309,9 +311,9 @@ class PerhitunganController extends Controller
             foreach ($kriterias as $kriteriaId => $items) {
                 // Hitung total nilai untuk kriteria tertentu dari periode yang ditentukan
                 $totalNilai = $items->sum('nilai');
-                // if ($kriteriaId != 4) {
-                //     $totalNilai /= 2;
-                // }
+                if ($kriteriaId != 4) {
+                    $totalNilai /= $jumlahBulan;
+                }
 
                 // Tentukan sub-kriteria berdasarkan total nilai
                 $subKriteria = $this->getSubKriteria($kriteriaId, $totalNilai, $userId);
