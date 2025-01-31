@@ -98,37 +98,35 @@ class DatabaseSeeder extends Seeder
 
 
         $subkriteria = [
-            ['id_kriteria' => 1, 'nama_sub_kriteria' => 'Sangat Baik', 'nilai' => 4],
-            ['id_kriteria' => 1, 'nama_sub_kriteria' => 'Baik', 'nilai' => 3],
-            ['id_kriteria' => 1, 'nama_sub_kriteria' => 'Cukup', 'nilai' => 2],
-            ['id_kriteria' => 1, 'nama_sub_kriteria' => 'Kurang', 'nilai' => 1],
-            ['id_kriteria' => 2, 'nama_sub_kriteria' => 'Sangat Baik', 'nilai' => 4],
-            ['id_kriteria' => 2, 'nama_sub_kriteria' => 'Baik', 'nilai' => 3],
-            ['id_kriteria' => 2, 'nama_sub_kriteria' => 'Cukup', 'nilai' => 2],
-            ['id_kriteria' => 2, 'nama_sub_kriteria' => 'Kurang', 'nilai' => 1],
-            ['id_kriteria' => 3, 'nama_sub_kriteria' => 'Sangat Baik', 'nilai' => 4],
-            ['id_kriteria' => 3, 'nama_sub_kriteria' => 'Baik', 'nilai' => 3],
-            ['id_kriteria' => 3, 'nama_sub_kriteria' => 'Cukup', 'nilai' => 2],
-            ['id_kriteria' => 3, 'nama_sub_kriteria' => 'Kurang', 'nilai' => 1],
-            ['id_kriteria' => 4, 'nama_sub_kriteria' => '>95%', 'nilai' => 4],
-            ['id_kriteria' => 4, 'nama_sub_kriteria' => '<95%', 'nilai' => 3],
-            ['id_kriteria' => 4, 'nama_sub_kriteria' => '≥80%', 'nilai' => 2],
-            ['id_kriteria' => 4, 'nama_sub_kriteria' => '<80%', 'nilai' => 1],
-            ['id_kriteria' => 5, 'nama_sub_kriteria' => 'Sangat Tinggi', 'nilai' => 4],
-            ['id_kriteria' => 5, 'nama_sub_kriteria' => 'Tinggi', 'nilai' => 3],
-            ['id_kriteria' => 5, 'nama_sub_kriteria' => 'Cukup', 'nilai' => 2],
-            ['id_kriteria' => 5, 'nama_sub_kriteria' => 'Rendah', 'nilai' => 1],
-            ['id_kriteria' => 6, 'nama_sub_kriteria' => '> 5 tahun', 'nilai' => 4],  // Sangat Baik
-            ['id_kriteria' => 6, 'nama_sub_kriteria' => '3 < Masa Kerja ≤ 5', 'nilai' => 3],  // Baik
-            ['id_kriteria' => 6, 'nama_sub_kriteria' => '1 < Masa Kerja ≤ 3', 'nilai' => 2],  // Cukup
-            ['id_kriteria' => 6, 'nama_sub_kriteria' => '≤ 1 tahun', 'nilai' => 1],  // Kurang
-            ['id_kriteria' => 7, 'nama_sub_kriteria' => 'Sangat Baik', 'nilai' => 4],
-            ['id_kriteria' => 7, 'nama_sub_kriteria' => 'Baik', 'nilai' => 3],
-            ['id_kriteria' => 7, 'nama_sub_kriteria' => 'Cukup', 'nilai' => 2],
-            ['id_kriteria' => 7, 'nama_sub_kriteria' => 'Kurang', 'nilai' => 1],
+            ['id_kriteria' => 1, 'nama_sub_kriteria' => 'KK>85', 'nilai' => 4],
+            ['id_kriteria' => 1, 'nama_sub_kriteria' => '80≤KK<85', 'nilai' => 3],
+            ['id_kriteria' => 1, 'nama_sub_kriteria' => '70≤KK<80', 'nilai' => 2],
+            ['id_kriteria' => 1, 'nama_sub_kriteria' => 'KK<70', 'nilai' => 1],
+            ['id_kriteria' => 2, 'nama_sub_kriteria' => 'K>85', 'nilai' => 4],
+            ['id_kriteria' => 2, 'nama_sub_kriteria' => '80≤K<85', 'nilai' => 3],
+            ['id_kriteria' => 2, 'nama_sub_kriteria' => '70≤K<80', 'nilai' => 2],
+            ['id_kriteria' => 2, 'nama_sub_kriteria' => 'K<70', 'nilai' => 1],
+            ['id_kriteria' => 3, 'nama_sub_kriteria' => 'TJ>85', 'nilai' => 4],
+            ['id_kriteria' => 3, 'nama_sub_kriteria' => '80≤TJ<85', 'nilai' => 3],
+            ['id_kriteria' => 3, 'nama_sub_kriteria' => '70≤TJ<80', 'nilai' => 2],
+            ['id_kriteria' => 3, 'nama_sub_kriteria' => 'TJ<70', 'nilai' => 1],
+            ['id_kriteria' => 4, 'nama_sub_kriteria' => 'A>95%', 'nilai' => 4],
+            ['id_kriteria' => 4, 'nama_sub_kriteria' => '90%≤A<95%', 'nilai' => 3],
+            ['id_kriteria' => 4, 'nama_sub_kriteria' => '80%≤A<90%', 'nilai' => 2],
+            ['id_kriteria' => 4, 'nama_sub_kriteria' => 'A<80%', 'nilai' => 1],
+            ['id_kriteria' => 5, 'nama_sub_kriteria' => 'IK>85', 'nilai' => 4],
+            ['id_kriteria' => 5, 'nama_sub_kriteria' => '80≤IK<85', 'nilai' => 3],
+            ['id_kriteria' => 5, 'nama_sub_kriteria' => '70≤IK<80', 'nilai' => 2],
+            ['id_kriteria' => 5, 'nama_sub_kriteria' => 'IK<70', 'nilai' => 1],
+            ['id_kriteria' => 6, 'nama_sub_kriteria' => 'MK>5 tahun', 'nilai' => 4],
+            ['id_kriteria' => 6, 'nama_sub_kriteria' => '3<MK≤5', 'nilai' => 3],
+            ['id_kriteria' => 6, 'nama_sub_kriteria' => '1<MK≤3', 'nilai' => 2],
+            ['id_kriteria' => 6, 'nama_sub_kriteria' => 'MK≤1 tahun', 'nilai' => 1],
+            ['id_kriteria' => 7, 'nama_sub_kriteria' => 'KJ>85', 'nilai' => 4],
+            ['id_kriteria' => 7, 'nama_sub_kriteria' => '80≤KJ<85', 'nilai' => 3],
+            ['id_kriteria' => 7, 'nama_sub_kriteria' => '70≤KJ<80', 'nilai' => 2],
+            ['id_kriteria' => 7, 'nama_sub_kriteria' => 'KJ<70', 'nilai' => 1],
         ];
-
-
 
         $penilaianPerbulan = [
             ['periode' => '2025-01', 'id_user' => 3, 'id_kriteria' => 1, 'nilai' => 100],
