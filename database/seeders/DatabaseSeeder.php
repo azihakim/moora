@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -164,9 +165,43 @@ class DatabaseSeeder extends Seeder
 
 
         DB::table('users')->insert($users);
-        DB::table('users')->insert($alternatif);
+        // DB::table('users')->insert($alternatif);
         DB::table('kriteria')->insert($kriteria);
         DB::table('sub_kriteria')->insert($subkriteria);
-        DB::table('penilaian_perbulans')->insert($penilaianPerbulan);
+        // DB::table('penilaian_perbulans')->insert($penilaianPerbulan);
+
+        // Buat 20 karyawan dengan username unik
+        $karyawan = [];
+        for ($i = 1; $i <= 20; $i++) {
+            $karyawan[] = [
+                'name' => 'Pegawai ' . $i,
+                'kode_alternatif' => 'A' . $i,
+                'tgl_masuk' => '2025-01-01',
+                'role' => 'Pegawai',
+                'username' => 'pegawai' . $i,
+                'password' => Hash::make('123'), // Gunakan bcrypt untuk hashing password
+            ];
+        }
+        DB::table('users')->insert($karyawan);
+
+        // Daftar kriteria (misalnya ada 7 kriteria)
+        $jumlahKriteria = 7;
+
+        // Periode penilaian
+        $periode = '2025-01';
+
+        // Buat penilaian acak untuk 20 karyawan
+        $penilaian = [];
+        foreach ($karyawan as $pegawai) {
+            for ($id_kriteria = 1; $id_kriteria <= $jumlahKriteria; $id_kriteria++) {
+                $penilaian[] = [
+                    'periode' => $periode,
+                    'id_user' => DB::table('users')->where('username', $pegawai['username'])->value('id'),
+                    'id_kriteria' => $id_kriteria,
+                    'nilai' => rand(50, 150), // Nilai acak antara 50-150
+                ];
+            }
+        }
+        DB::table('penilaian_perbulans')->insert($penilaian);
     }
 }
